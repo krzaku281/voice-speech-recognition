@@ -1,0 +1,28 @@
+{
+  "name": "voice-speech-recognition",
+  "version": "1.0.1",
+  "description": "Simple wrapper extended functionalities of Speech Recognition embedded in browsers.",
+  "main": "src/voice-speech-recognition.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krzaku281/voice-speech-recognition.git"
+  },
+  "keywords": [
+    "voice",
+    "speech",
+    "recognition",
+    "stt"
+  ],
+  "author": "Marek Krzak <krzakmarek88@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krzaku281/voice-speech-recognition/issues"
+  },
+  "homepage": "https://github.com/krzaku281/voice-speech-recognition#readme",
+  "publishConfig": {
+	"registry": "https://registry.npmjs.org/"
+  }
+}
