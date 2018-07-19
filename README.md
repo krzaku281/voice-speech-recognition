@@ -13,7 +13,7 @@ $ npm install voice-speech-recognition
 var VSR = require('voice-speech-recognition');
     
 var recognizer = VSR.voiceSpeechRecognition();
-recognizer.begin();
+recognizer.startRecognition();
 });
 ```
 # Configuration
@@ -37,18 +37,19 @@ var recognizer = VSR.voiceSpeechRecognition(config);
 > - serviceURI - specifies the location of the speech recognition service
 
 # Getters
-> - recognizing - is recognizing in progress,
-> - finalRecognized - final recognized speech,
-> - interimRecognized - processed speech till this time,
-> - lastRecognized - last processed part of speech
+> - isRecognizing - does recognizing is in progress,
+> - finalRecognizing - final recognized speech,
+> - interimRecognizing - processed speech till this time,
+> - lastRecognizing - last processed part of speech
 ```sh
-var text = recognizer.finalRecognized;
+var text = recognizer.finalRecognizing;
 ```
 
 # Controls
-> - begin() - start recognizing of audio stream, speech etc.,
-> - end() - stop working,
-> - interrupt() - force stop working without last result handling
+> - startRecognition() - start recognizing of audio stream, speech etc.,
+> - stopRecognition() - stop working,
+> - abortRecognition() - force stop working without last result handling,
+> - resetRecognition() - reset all text ouputs for recognized speech
 
 # Events 
 You can add event listeners for these events:

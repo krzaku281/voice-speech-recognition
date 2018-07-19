@@ -4,14 +4,19 @@ module.exports = {
 	voiceSpeechRecognition: createVoiceSpeechRecognition,
 };
 
-function checkSupportForBrowsers() {
-	if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-	  throw new Error("No support for speech recognition in this browser.");
+function isSupportForSpeechRecognition() {
+	if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+		return true;
 	}
-}
+	
+	console.error("No support for speech recognition in this browser.");
+	return false;
+};
 
 function createVoiceSpeechRecognition(config = {}) {
-	checkSupportForBrowsers();	
+	if(!isSupportForSpeechRecognition()){
+		return null;
+	}	
 	var SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 
 	// initialization
@@ -26,53 +31,59 @@ function createVoiceSpeechRecognition(config = {}) {
 	}
 	
 	// getters
-	recognizer.recognizing = false;
-	recognizer.finalRecognized = '';
-	recognizer.interimRecognized = '';
-	recognizer.lastRecognized = '';
+	recognizer.isRecognizing = false;
+	recognizer.finalRecognizing = '';
+	recognizer.interimRecognizing = '';
+	recognizer.lastRecognizing = '';
 	
 	// control methods
-	recognizer.begin = begin;
-	recognizer.end = end;
-	recognizer.interrupt = interrupt;
+	recognizer.startRecognition = startRecognition;
+	recognizer.stopRecognition = stopRecognition;
+	recognizer.abortRecognition = abortRecognition;
+	recognizer.resetRecognition = resetRecognition;
 	
 	// event handlers
 	recognizer.addEventListener('start', function() {
-		this.recognizing = true;
+		this.isRecognizing = true;
 	});
 	
 	recognizer.addEventListener('result', function(event) {
 		for (var i = event.resultIndex; i < event.results.length; ++i) {
 			if (event.results[i].isFinal) {
-				this.finalRecognized += event.results[i][0].transcript;
+				this.finalRecognizing += event.results[i][0].transcript;
 			} else {
-				this.interimRecognized += event.results[i][0].transcript;
+				this.interimRecognizing += event.results[i][0].transcript;
 			}
 		}
 		
-		this.lastRecognized = event.results[event.results.length][0].transcript;
+		this.lastRecognizing = event.results[event.results.length][0].transcript;
 	});
 
 	recognizer.addEventListener('error', function(event) {
-		this.recognizing = false;
+		this.isRecognizing = false;
 	});
 
-	recognizer.addEventListener('end', function onEnd() {
-		this.recognizing = false;
+	recognizer.addEventListener('end', function() {
+		this.isRecognizing = false;
 	});
 	
 	return recognizer;
 };
 
-function begin() {
-	this.finalRecognized = this.interimRecognized = this.lastRecognized = '';
+function resetRecognition() {
+	this.finalRecognizing = this.interimRecognizing = this.lastRecognizing = '';
+};
+
+function startRecognition() {
+	this.resetRecognition();
 	this.start();
 };
 
-function end {
+function stopRecognition() {
 	this.stop();
 };
 
-function interrupt() {
+function abortRecognition() {
 	this.abort();
 };
+
