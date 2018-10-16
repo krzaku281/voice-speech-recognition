@@ -14,7 +14,7 @@ function isSupportForSpeechRecognition() {
 };
 
 function createVoiceSpeechRecognition(config = {}) {
-	if(!isSupportForSpeechRecognition()){
+	if(!isSupportForSpeechRecognition()) {
 		return null;
 	}	
 	var SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
@@ -48,7 +48,9 @@ function createVoiceSpeechRecognition(config = {}) {
 	});
 	
 	recognizer.addEventListener('result', function(event) {
-		for (var i = event.resultIndex; i < event.results.length; ++i) {
+		var resultLength = event.results.length;
+		
+		for (var i = event.resultIndex; i < resultLength; ++i) {
 			if (event.results[i].isFinal) {
 				this.finalRecognizing += event.results[i][0].transcript;
 			} else {
@@ -56,7 +58,7 @@ function createVoiceSpeechRecognition(config = {}) {
 			}
 		}
 		
-		this.lastRecognizing = event.results[event.results.length][0].transcript;
+		this.lastRecognizing = event.results[resultLength-1][0].transcript;
 	});
 
 	recognizer.addEventListener('error', function(event) {
@@ -75,8 +77,14 @@ function resetRecognition() {
 };
 
 function startRecognition() {
-	this.resetRecognition();
-	this.start();
+	if(!this.isRecognizing) {
+		try {
+			this.resetRecognition();
+			this.start();
+		} catch (err) {
+			console.error(err.message);
+		}
+	}
 };
 
 function stopRecognition() {
