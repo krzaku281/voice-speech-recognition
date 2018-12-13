@@ -1,9 +1,5 @@
 "use strict";
 
-module.exports = {
-	voiceSpeechRecognition: createVoiceSpeechRecognition,
-};
-
 function isSupportForSpeechRecognition() {
 	if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 		return true;
@@ -13,7 +9,10 @@ function isSupportForSpeechRecognition() {
 	return false;
 };
 
-function createVoiceSpeechRecognition(config = {}) {
+function createVoiceSpeechRecognition(config) {
+	if (typeof config === 'undefined') {
+		config = {};
+	}
 	if(!isSupportForSpeechRecognition()) {
 		return null;
 	}	
@@ -93,5 +92,9 @@ function stopRecognition() {
 
 function abortRecognition() {
 	this.abort();
+};
+
+module.exports = {
+	voiceSpeechRecognition: createVoiceSpeechRecognition,
 };
 
